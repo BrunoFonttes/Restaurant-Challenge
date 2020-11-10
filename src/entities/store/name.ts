@@ -1,0 +1,27 @@
+import { Either, left, right } from "../../shared/either"
+import { InvalidNameError } from "./errors/invalid-name"
+
+export class Name {
+    private readonly name: string
+    private constructor(name: string) {
+        this.name = name
+    }
+
+    get value(): string {
+        return this.name
+    }
+
+    static create(name: string): Either<InvalidNameError, Name> {
+        if (Name.validate(name)) {
+            return right(new Name(name))
+        }
+        return left(new InvalidNameError(name))
+    }
+
+    static validate(name: string): boolean {
+        if (!name || name.trim().length < 2 || name.trim().length > 100) {
+            return false
+        }
+        return true
+    }
+}
